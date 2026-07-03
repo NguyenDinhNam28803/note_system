@@ -14,12 +14,14 @@ import { AuthModule } from './modules/auth/auth.module';
       global: true,
       imports: [ConfigModule],
       inject: [ConfigService],
+      // Mặc định dùng access secret — JwtAuthGuard verify access token bằng config này.
+      // JwtUtilsService tự truyền secret riêng cho từng loại token khi ký/verify.
       useFactory: (config: ConfigService) => ({
-        secret: config.get<string>('JWT_SECRET'),
+        secret: config.get<string>('JWT_ACCESS_SECRET'),
         signOptions: {
           expiresIn: config.get<string>(
-            'JWT_EXPIRES_IN',
-            '1d',
+            'JWT_ACCESS_EXPIRES_IN',
+            '15m',
           ) as JwtSignOptions['expiresIn'],
         },
       }),
